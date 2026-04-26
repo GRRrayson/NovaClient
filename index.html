@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Client — Dominate Every Server</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            nova: {
+              50: '#f0fff4',
+              100: '#c6f6d5',
+              200: '#9ae6b4',
+              300: '#68d391',
+              400: '#48bb78',
+              500: '#38a169',
+              600: '#9333ea',
+              700: '#7c3aed',
+              800: '#1a1a2e',
+              900: '#0d0d1a',
+              950: '#070710',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { scroll-behavior: smooth; }
+    body { background: #070710; }
+
+    .glow-green { text-shadow: 0 0 20px rgba(74, 222, 128, 0.5), 0 0 40px rgba(74, 222, 128, 0.2); }
+    .glow-purple { text-shadow: 0 0 20px rgba(147, 51, 234, 0.5), 0 0 40px rgba(147, 51, 234, 0.2); }
+
+    .card-glow:hover {
+      box-shadow: 0 0 30px rgba(74, 222, 128, 0.15), 0 0 60px rgba(147, 51, 234, 0.1);
+    }
+
+    .btn-glow {
+      background: linear-gradient(135deg, #4ade80, #9333ea);
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 25px rgba(74, 222, 128, 0.4), 0 0 50px rgba(147, 51, 234, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: #4ade80;
+      box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-gradient {
+      background: radial-gradient(ellipse at 50% 0%, rgba(147, 51, 234, 0.15) 0%, rgba(74, 222, 128, 0.05) 40%, transparent 70%);
+    }
+
+    .popular-badge {
+      background: linear-gradient(135deg, #9333ea, #4ade80);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .float-anim { animation: float 3s ease-in-out infinite; }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(74, 222, 128, 0.6), 0 0 60px rgba(147, 51, 234, 0.3); }
+    }
+
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+    .feature-icon {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(147, 51, 234, 0.1));
+      border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(13, 13, 26, 0.8), rgba(26, 26, 46, 0.8));
+      border: 1px solid rgba(74, 222, 128, 0.1);
+    }
+
+    .pricing-card {
+      background: linear-gradient(180deg, rgba(13, 13, 26, 0.9), rgba(26, 26, 46, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.4s ease;
+    }
+
+    .pricing-popular {
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      background: linear-gradient(180deg, rgba(13, 13, 26, 0.95), rgba(26, 46, 26, 0.9));
+    }
+
+    .faq-item {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    .faq-item:hover { border-color: rgba(74, 222, 128, 0.2); }
+
+    .nav-blur {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(7, 7, 16, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #4ade80;
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: float-particle linear infinite;
+    }
+
+    @keyframes float-particle {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
+      100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+    }
+
+    .screenshot-card {
+      transition: all 0.4s ease;
+    }
+    .screenshot-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 30px rgba(74, 222, 128, 0.2);
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #070710; }
+    ::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #2a2a4e; }
+
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    .toast {
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="text-white font-sans overflow-x-hidden">
+
+  <!-- Particles Background -->
+  <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="#" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm">N</div>
+          <span class="text-xl font-bold tracking-tight">Nova<span class="text-green-400"> Client</span></span>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#features" class="text-gray-400 hover:text-green-400 transition-colors text-sm font-medium">Features</a>
+          <a href="#showcase" class="text-gray-400 hover:text-green-400 transition-colors text-sm font-medium">Showcase</a>
+          <a href="#pricing" class="text-gray-400 hover:text-green-400 transition-colors text-sm font-medium">Pricing</a>
+          <a href="#faq" class="text-gray-400 hover:text-green-400 transition-colors text-sm font-medium">FAQ</a>
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+          <button id="cartToggle" class="relative flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors text-sm font-medium px-4 py-2 border border-gray-800 hover:border-green-500/30 rounded-lg">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            Cart
+            <span id="cartCount" class="absolute -top-2 -right-2 bg-green-400 text-nova-950 text-xs font-bold min-w-5 h-5 px-1 rounded-full flex items-center justify-center">0</span>
+          </button>
+          <a href="https://discord.gg/novaclient" target="_blank" class="flex items-center gap-2 text-gray-400 hover:text-indigo-400 transition-colors text-sm font-medium px-4 py-2 border border-gray-800 hover:border-indigo-500/30 rounded-lg">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            Discord
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-medium px-4 py-2">Login</a>
+          <a href="#pricing" class="btn-glow text-sm font-semibold px-5 py-2.5 rounded-lg text-white">Get Started</a>
+        </div>
+        <button id="mobileToggle" class="md:hidden text-gray-400 hover:text-white">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu fixed inset-0 z-50 bg-nova-950/98 md:hidden">
+    <div class="flex flex-col h-full p-6">
+      <div class="flex items-center justify-between mb-10">
+        <a href="#" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm">N</div>
+          <span class="text-xl font-bold">Nova<span class="text-green-400"> Client</span></span>
+        </a>
+        <button id="mobileClose" class="text-gray-400 hover:text-white">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div class="flex flex-col gap-6">
+        <a href="#features" class="text-2xl font-semibold text-gray-300 hover:text-green-400 transition-colors mobile-link">Features</a>
+        <a href="#showcase" class="text-2xl font-semibold text-gray-300 hover:text-green-400 transition-colors mobile-link">Showcase</a>
+        <a href="#pricing" class="text-2xl font-semibold text-gray-300 hover:text-green-400 transition-colors mobile-link">Pricing</a>
+        <a href="#faq" class="text-2xl font-semibold text-gray-300 hover:text-green-400 transition-colors mobile-link">FAQ</a>
+      </div>
+      <div class="mt-auto flex flex-col gap-3">
+        <button id="mobileCartToggle" class="relative flex items-center justify-center gap-2 text-center text-green-400 hover:text-green-300 transition-colors font-medium py-3 rounded-lg border border-green-500/20 hover:border-green-500/40">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          Cart
+          <span id="mobileCartCount" class="absolute top-2 right-3 bg-green-400 text-nova-950 text-[10px] font-bold min-w-4 h-4 px-1 rounded-full flex items-center justify-center">0</span>
+        </button>
+        <a href="https://discord.gg/novaclient" target="_blank" class="flex items-center justify-center gap-2 text-center text-indigo-400 hover:text-indigo-300 transition-colors font-medium py-3 rounded-lg border border-indigo-500/20 hover:border-indigo-500/40 mobile-link">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          Join Discord
+        </a>
+        <a href="#" class="text-center text-gray-400 hover:text-white transition-colors font-medium py-3 rounded-lg border border-gray-800">Login</a>
+        <a href="#pricing" class="btn-glow text-center font-semibold py-3 rounded-lg text-white mobile-link">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-nova-950/95 border-l border-white/10 z-50 transform translate-x-full transition-transform duration-300 backdrop-blur-xl">
+    <div class="h-full flex flex-col">
+      <div class="p-6 border-b border-white/10 flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold">Your Cart</h3>
+          <p class="text-xs text-gray-500 mt-1">Review plans before checkout</p>
+        </div>
+        <button id="cartClose" class="text-gray-500 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-3">
+        <p class="text-sm text-gray-500">Your cart is empty.</p>
+      </div>
+      <div class="p-6 border-t border-white/10">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-sm text-gray-400">Estimated total</span>
+          <span id="cartTotal" class="text-xl font-black">$0.00</span>
+        </div>
+        <button onclick="checkoutCart()" class="w-full btn-glow py-3 rounded-xl text-white font-semibold text-sm">
+          Proceed to Checkout
+        </button>
+        <p class="text-[11px] text-gray-600 mt-3">Recommended stack: Stripe Checkout (primary), PayPal (fallback), Coinbase Commerce (crypto).</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center hero-gradient grid-bg pt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
+      <div class="text-center max-w-4xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-400/20 bg-green-400/5 text-green-400 text-xs font-mono mb-8">
+          <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+          v4.2.0 — NOW UNDETECTED
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-6">
+          Dominate Every<br>
+          <span class="bg-gradient-to-r from-green-400 via-emerald-400 to-purple-500 bg-clip-text text-transparent">Server</span>
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+          The most advanced Minecraft client with powerful modules, seamless injection, and complete undetectability. Rise to the top.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <a href="#pricing" class="btn-glow px-8 py-4 rounded-xl text-white font-bold text-lg w-full sm:w-auto pulse-glow">
+            Purchase Now
+          </a>
+          <a href="#showcase" class="btn-outline px-8 py-4 rounded-xl text-green-400 font-semibold text-lg w-full sm:w-auto flex items-center justify-center gap-2">
+            <i data-lucide="play" class="w-5 h-5"></i>
+            See it in Action
+          </a>
+        </div>
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto">
+          <div class="stat-card rounded-xl p-4 text-center">
+            <div class="text-2xl md:text-3xl font-black text-green-400 glow-green" id="statUsers">0</div>
+            <div class="text-gray-500 text-xs md:text-sm mt-1">Active Users</div>
+          </div>
+          <div class="stat-card rounded-xl p-4 text-center">
+            <div class="text-2xl md:text-3xl font-black text-green-400 glow-green" id="statUptime">0</div>
+            <div class="text-gray-500 text-xs md:text-sm mt-1">Uptime %</div>
+          </div>
+          <div class="stat-card rounded-xl p-4 text-center">
+            <div class="text-2xl md:text-3xl font-black text-green-400 glow-green" id="statUpdates">0</div>
+            <div class="text-gray-500 text-xs md:text-sm mt-1">Updates</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="relative py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-green-400 font-mono text-sm tracking-widest uppercase">Modules</span>
+        <h2 class="text-3xl md:text-5xl font-black mt-3 mb-4">Packed with <span class="text-green-400">Power</span></h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Every module designed for maximum performance and complete stealth. No compromises.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Feature Cards -->
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-green-400/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="crosshair" class="w-6 h-6 text-green-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Aim Assist</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Smart aiming with customizable FOV, smoothness, and target selection. Looks completely legit.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-green-400/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="box" class="w-6 h-6 text-green-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">ESP & Tracers</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">See players, mobs, and items through walls with customizable rendering and color coding.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-green-400/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="zap" class="w-6 h-6 text-green-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Speed & Fly</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Multiple speed and fly modes with anti-kick and server-specific bypasses built in.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-purple-500/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="shield" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Anti-Cheat Bypass</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Undetected on Hypixel, Vulcan, Grim, Matrix, and more. Updated within hours of detections.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-purple-500/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="sword" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Kill Aura</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Advanced combat with rotation smoothing, switch modes, and weapon-specific settings.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-purple-500/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="terminal" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Script Engine</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Write custom modules with our JavaScript API. Infinite possibilities, full documentation.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-green-400/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="moon" class="w-6 h-6 text-green-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Auto Clicker</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Randomized CPS with hit selection, block-hit, and rod support for legit PvP.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-green-400/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="layers" class="w-6 h-6 text-green-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Scaffold & Tower</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Expand, telly, and bridge modes with tower and speed adjustments for every server.</p>
+        </div>
+        <div class="group p-6 rounded-2xl bg-nova-900/50 border border-white/5 hover:border-purple-500/20 card-glow transition-all duration-300">
+          <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="settings" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Config System</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Save, load, and share configs. Cloud-synced with community configs marketplace.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Section -->
+  <section id="showcase" class="relative py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-green-400 font-mono text-sm tracking-widest uppercase">Gallery</span>
+        <h2 class="text-3xl md:text-5xl font-black mt-3 mb-4">See it <span class="text-purple-400">Live</span></h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Real screenshots from our community. This is what dominating looks like.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="screenshot-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer">
+          <div class="relative">
+            <img src="http://static.photos/gaming/640x360/1" alt="Kill Aura Showcase" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-nova-950/90 to-transparent flex items-end p-5">
+              <div>
+                <span class="text-green-400 text-xs font-mono">COMBAT</span>
+                <h4 class="font-bold mt-1">Kill Aura in Action</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer">
+          <div class="relative">
+            <img src="http://static.photos/technology/640x360/2" alt="ESP Showcase" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-nova-950/90 to-transparent flex items-end p-5">
+              <div>
+                <span class="text-purple-400 text-xs font-mono">RENDER</span>
+                <h4 class="font-bold mt-1">ESP & Tracers</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer">
+          <div class="relative">
+            <img src="http://static.photos/abstract/640x360/3" alt="HUD Showcase" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-nova-950/90 to-transparent flex items-end p-5">
+              <div>
+                <span class="text-green-400 text-xs font-mono">HUD</span>
+                <h4 class="font-bold mt-1">Custom HUD Editor</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer">
+          <div class="relative">
+            <img src="http://static.photos/blurred/640x360/4" alt="ClickGUI" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-nova-950/90 to-transparent flex items-end p-5">
+              <div>
+                <span class="text-purple-400 text-xs font-mono">UI</span>
+                <h4 class="font-bold mt-1">Sleek ClickGUI</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer">
+          <div class="relative">
+            <img src="http://static.photos/minimal/640x360/5" alt="Config Manager" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-nova-950/90 to-transparent flex items-end p-5">
+              <div>
+                <span class="text-green-400 text-xs font-mono">SYSTEM</span>
+                <h4 class="font-bold mt-1">Config Manager</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer">
+          <div class="relative">
+            <img src="http://static.photos/workspace/640x360/6" alt="Script Engine" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-nova-950/90 to-transparent flex items-end p-5">
+              <div>
+                <span class="text-purple-400 text-xs font-mono">CODE</span>
+                <h4 class="font-bold mt-1">Script Engine IDE</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="relative py-24 md:py-32">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-16">
+        <span class="text-green-400 font-mono text-sm tracking-widest uppercase">Pricing</span>
+        <h2 class="text-3xl md:text-5xl font-black mt-3 mb-4">Choose Your <span class="text-green-400">Plan</span></h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Every plan includes all modules. The difference? Support, updates, and exclusivity.</p>
+      </div>
+
+      <!-- Billing Toggle -->
+      <div class="flex items-center justify-center gap-4 mb-12">
+        <span id="monthlyLabel" class="text-sm font-semibold text-white">Monthly</span>
+        <button id="billingToggle" class="relative w-14 h-7 bg-nova-800 rounded-full border border-white/10 transition-all" onclick="toggleBilling()">
+          <div id="toggleDot" class="absolute top-0.5 left-0.5 w-6 h-6 bg-green-400 rounded-full transition-all duration-300"></div>
+        </button>
+        <span id="yearlyLabel" class="text-sm font-semibold text-gray-500">Yearly <span class="text-green-400 text-xs">-25%</span></span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <!-- Starter Plan -->
+        <div class="pricing-card rounded-2xl p-8 hover:border-green-400/20 transition-all duration-300">
+          <div class="mb-6">
+            <h3 class="text-lg font-bold text-gray-300">Starter</h3>
+            <p class="text-gray-600 text-sm mt-1">For casual players</p>
+          </div>
+          <div class="mb-8">
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-black text-white price-amount" data-monthly="9.99" data-yearly="7.49">$9.99</span>
+              <span class="text-gray-600 text-sm">/month</span>
+            </div>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              All combat modules
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              All render modules
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              All movement modules
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Basic config system
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <i data-lucide="x" class="w-4 h-4 text-gray-700 flex-shrink-0"></i>
+              Script engine
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <i data-lucide="x" class="w-4 h-4 text-gray-700 flex-shrink-0"></i>
+              Priority support
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <i data-lucide="x" class="w-4 h-4 text-gray-700 flex-shrink-0"></i>
+              Beta access
+            </li>
+          </ul>
+          <button onclick="addToCart('Starter')" class="w-full btn-outline py-3 rounded-xl text-green-400 font-semibold text-sm">
+            Add Starter to Cart
+          </button>
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="pricing-popular rounded-2xl p-8 relative overflow-hidden hover:border-green-400/40 transition-all duration-300">
+          <div class="absolute top-4 right-4">
+            <span class="popular-badge text-xs font-bold px-3 py-1 rounded-full text-white">POPULAR</span>
+          </div>
+          <div class="mb-6">
+            <h3 class="text-lg font-bold text-green-400">Premium</h3>
+            <p class="text-gray-600 text-sm mt-1">For serious players</p>
+          </div>
+          <div class="mb-8">
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-black text-white price-amount" data-monthly="19.99" data-yearly="14.99">$19.99</span>
+              <span class="text-gray-600 text-sm">/month</span>
+            </div>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Everything in Starter
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Script engine access
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Cloud config sync
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Priority support
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Anti-cheat updates (24h)
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i>
+              Custom themes
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <i data-lucide="x" class="w-4 h-4 text-gray-700 flex-shrink-0"></i>
+              Beta access
+            </li>
+          </ul>
+          <button onclick="addToCart('Premium')" class="w-full btn-glow py-3 rounded-xl text-white font-semibold text-sm">
+            Add Premium to Cart
+          </button>
+        </div>
+
+        <!-- Lifetime Plan -->
+        <div class="pricing-card rounded-2xl p-8 hover:border-purple-500/20 transition-all duration-300">
+          <div class="mb-6">
+            <h3 class="text-lg font-bold text-purple-400">Lifetime</h3>
+            <p class="text-gray-600 text-sm mt-1">One and done</p>
+          </div>
+          <div class="mb-8">
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-black text-white price-amount" data-monthly="99.99" data-yearly="74.99">$99.99</span>
+              <span class="text-gray-600 text-sm">/one-time</span>
+            </div>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Everything in Premium
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Lifetime updates
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Beta build access
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Exclusive modules
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Private Discord role
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Direct developer line
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <i data-lucide="check" class="w-4 h-4 text-purple-400 flex-shrink-0"></i>
+              Name in credits
+            </li>
+          </ul>
+          <button onclick="addToCart('Lifetime')" class="w-full py-3 rounded-xl text-purple-400 font-semibold text-sm border border-purple-500/30 hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300">
+            Add Lifetime to Cart
+          </button>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="mt-12 text-center">
+        <p class="text-gray-600 text-sm mb-4">Secure payment via</p>
+        <div class="flex items-center justify-center gap-6 flex-wrap">
+          <div class="flex items-center gap-2 text-gray-500 text-sm">
+            <i data-lucide="credit-card" class="w-5 h-5"></i>
+            <span>Stripe</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-500 text-sm">
+            <i data-lucide="wallet" class="w-5 h-5"></i>
+            <span>Crypto</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-500 text-sm">
+            <i data-lucide="banknote" class="w-5 h-5"></i>
+            <span>PayPal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-24 md:py-32 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-green-400 font-mono text-sm tracking-widest uppercase">Testimonials</span>
+        <h2 class="text-3xl md:text-5xl font-black mt-3 mb-4">Loved by <span class="text-purple-400">Thousands</span></h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="p-6 rounded-2xl bg-nova-900/50 border border-white/5">
+          <div class="flex items-center gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4">"Best client I've ever used. The bypasses are insane and it gets updated faster than any other client. Worth every penny."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-xs font-bold">D</div>
+            <div>
+              <div class="text-sm font-semibold">DarkKnight</div>
+              <div class="text-gray-600 text-xs">Premium User</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-6 rounded-2xl bg-nova-900/50 border border-white/5">
+          <div class="flex items-center gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4">"Script engine alone is worth it. I wrote custom modules for Skyblock and it works perfectly. Devs are super responsive too."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-xs font-bold">S</div>
+            <div>
+              <div class="text-sm font-semibold">SkyLord_42</div>
+              <div class="text-gray-600 text-xs">Lifetime User</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-6 rounded-2xl bg-nova-900/50 border border-white/5">
+          <div class="flex items-center gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4">"Went from Starter to Lifetime within a week. The HUD customization is next level and the community is amazing."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-cyan-600 flex items-center justify-center text-xs font-bold">Z</div>
+            <div>
+              <div class="text-sm font-semibold">xZynetic</div>
+              <div class="text-gray-600 text-xs">Lifetime User</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="py-24 md:py-32 relative">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-green-400 font-mono text-sm tracking-widest uppercase">FAQ</span>
+        <h2 class="text-3xl md:text-5xl font-black mt-3 mb-4">Got <span class="text-green-400">Questions?</span></h2>
+      </div>
+      <div class="space-y-3">
+        <div class="faq-item rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors">
+            <span class="font-semibold text-sm md:text-base">Is NovaCraft detectable?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 faq-icon transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-5 pb-5 text-gray-500 text-sm leading-relaxed">Nova Client uses advanced injection methods that make it virtually undetectable by current anti-cheat systems. We update our bypasses within hours of any detection reports and maintain a 99.9% undetection rate across all major servers.</p>
+          </div>
+        </div>
+        <div class="faq-item rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors">
+            <span class="font-semibold text-sm md:text-base">Which servers are supported?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 faq-icon transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-5 pb-5 text-gray-500 text-sm leading-relaxed">We support all major servers including Hypixel, PvPLand, BlocksMC, MCC Island, and many more. Each server has dedicated bypass modules that are regularly updated. Check our Discord for the full supported server list.</p>
+          </div>
+        </div>
+        <div class="faq-item rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors">
+            <span class="font-semibold text-sm md:text-base">What Minecraft versions are supported?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 faq-icon transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-5 pb-5 text-gray-500 text-sm leading-relaxed">Nova Client currently supports 1.8.9, 1.12.2, 1.16.5, 1.19.x, and 1.20.x. Version support is added based on community demand, and Premium/Lifetime users get early access to new version support.</p>
+          </div>
+        </div>
+        <div class="faq-item rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors">
+            <span class="font-semibold text-sm md:text-base">What payment methods do you accept?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 faq-icon transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-5 pb-5 text-gray-500 text-sm leading-relaxed">We accept credit/debit cards via Stripe, PayPal, and various cryptocurrencies including Bitcoin, Ethereum, and Litecoin. All transactions are encrypted and we never store your payment details.</p>
+          </div>
+        </div>
+        <div class="faq-item rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors">
+            <span class="font-semibold text-sm md:text-base">Can I get a refund?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 faq-icon transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-5 pb-5 text-gray-500 text-sm leading-relaxed">We offer a 24-hour refund policy if you experience technical issues that our support team cannot resolve. Due to the digital nature of the product, refunds are not available for change of mind. Lifetime purchases are non-refundable.</p>
+          </div>
+        </div>
+        <div class="faq-item rounded-xl overflow-hidden">
+          <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left hover:bg-white/[0.02] transition-colors">
+            <span class="font-semibold text-sm md:text-base">How do I get support?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 faq-icon transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-5 pb-5 text-gray-500 text-sm leading-relaxed">Starter users get community support via our Discord. Premium users get priority ticket support with 12-hour response times. Lifetime users have a direct developer line with near-instant responses and private voice chat support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 md:py-32 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="p-10 md:p-16 rounded-3xl bg-gradient-to-br from-nova-900/80 to-nova-800/50 border border-white/5 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-green-400/5 to-purple-600/5 pointer-events-none"></div>
+        <div class="relative z-10">
+          <h2 class="text-3xl md:text-5xl font-black mb-4">Ready to <span class="text-green-400">Dominate?</span></h2>
+          <p class="text-gray-500 mb-8 max-w-lg mx-auto">Join thousands of players who trust Nova Client. Start winning today.</p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#pricing" class="btn-glow px-8 py-4 rounded-xl text-white font-bold text-lg w-full sm:w-auto">
+              Get Nova Client Now
+            </a>
+            <a href="https://discord.gg/novaclient" target="_blank" class="btn-outline px-8 py-4 rounded-xl text-green-400 font-semibold flex items-center justify-center gap-2 w-full sm:w-auto">
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
+              Join Discord
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div class="col-span-2 md:col-span-1">
+          <a href="#" class="flex items-center gap-2 mb-4">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-green-400 to-purple-600 flex items-center justify-center text-white font-bold text-xs">N</div>
+            <span class="text-lg font-bold">Nova<span class="text-green-400"> Client</span></span>
+          </a>
+          <p class="text-gray-600 text-sm leading-relaxed">The most advanced Minecraft client. Dominate every server.</p>
+          <a href="https://discord.gg/novaclient" target="_blank" class="inline-flex items-center gap-2 mt-3 text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-medium">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            Join our Discord
+          </a>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm text-gray-300 mb-4">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="#features" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Features</a></li>
+            <li><a href="#pricing" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Pricing</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Changelog</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Download</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm text-gray-300 mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#faq" class="text-gray-600 text-sm hover:text-green-400 transition-colors">FAQ</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Discord</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Wiki</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Status</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm text-gray-300 mb-4">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Terms</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Privacy</a></li>
+            <li><a href="#" class="text-gray-600 text-sm hover:text-green-400 transition-colors">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-gray-700 text-xs">&copy; 2024 Nova Client. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <a href="#" class="text-gray-700 hover:text-green-400 transition-colors"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+          <a href="#" class="text-gray-700 hover:text-green-400 transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+          <a href="#" class="text-gray-700 hover:text-green-400 transition-colors"><i data-lucide="github" class="w-4 h-4"></i></a>
+          <a href="#" class="text-gray-700 hover:text-green-400 transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast fixed bottom-6 right-6 z-50 bg-nova-800 border border-green-400/20 rounded-xl p-4 shadow-2xl flex items-center gap-3 max-w-sm">
+    <div class="w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center flex-shrink-0">
+      <i data-lucide="shopping-cart" class="w-5 h-5 text-green-400"></i>
+    </div>
+    <div>
+      <div class="font-semibold text-sm" id="toastTitle">Added to Cart</div>
+      <div class="text-gray-500 text-xs mt-0.5" id="toastMessage">NovaCraft Starter — $9.99/mo</div>
+    </div>
+    <button onclick="hideToast()" class="text-gray-600 hover:text-white ml-2">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Menu
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartToggle = document.getElementById('cartToggle');
+    const mobileCartToggle = document.getElementById('mobileCartToggle');
+    const cartClose = document.getElementById('cartClose');
+
+    mobileToggle.addEventListener('click', () => mobileMenu.classList.add('active'));
+    mobileClose.addEventListener('click', () => mobileMenu.classList.remove('active'));
+    cartToggle.addEventListener('click', () => openCart());
+    mobileCartToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      openCart();
+    });
+    cartClose.addEventListener('click', () => closeCart());
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('active'));
+    });
+
+    // Billing Toggle
+    let isYearly = false;
+    const cart = [];
+    const planLabels = {
+      Starter: { monthly: 9.99, yearly: 7.49 },
+      Premium: { monthly: 19.99, yearly: 14.99 },
+      Lifetime: { monthly: 99.99, yearly: 74.99 }
+    };
+
+    function getPlanPrice(plan) {
+      return isYearly ? planLabels[plan].yearly : planLabels[plan].monthly;
+    }
+
+    function toggleBilling() {
+      isYearly = !isYearly;
+      const dot = document.getElementById('toggleDot');
+      const monthlyLabel = document.getElementById('monthlyLabel');
+      const yearlyLabel = document.getElementById('yearlyLabel');
+
+      if (isYearly) {
+        dot.style.transform = 'translateX(28px)';
+        monthlyLabel.classList.remove('text-white');
+        monthlyLabel.classList.add('text-gray-500');
+        yearlyLabel.classList.remove('text-gray-500');
+        yearlyLabel.classList.add('text-white');
+      } else {
+        dot.style.transform = 'translateX(0)';
+        monthlyLabel.classList.remove('text-gray-500');
+        monthlyLabel.classList.add('text-white');
+        yearlyLabel.classList.remove('text-white');
+        yearlyLabel.classList.add('text-gray-500');
+      }
+
+      document.querySelectorAll('.price-amount').forEach(el => {
+        const price = isYearly ? el.dataset.yearly : el.dataset.monthly;
+        el.textContent = `$${price}`;
+      });
+    }
+
+    // FAQ Toggle
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const icon = btn.querySelector('.faq-icon');
+      const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+
+      // Close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0px');
+      document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+
+      if (!isOpen) {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    // Toast Notification
+    let toastTimeout;
+
+    function showToast(title, message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMessage').textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(hideToast, 4000);
+    }
+
+    function hideToast() {
+      document.getElementById('toast').classList.remove('show');
+    }
+
+    function openCart() {
+      cartDrawer.classList.remove('translate-x-full');
+    }
+
+    function closeCart() {
+      cartDrawer.classList.add('translate-x-full');
+    }
+
+    function updateCartUI() {
+      const desktopCount = document.getElementById('cartCount');
+      const mobileCount = document.getElementById('mobileCartCount');
+      const cartItemsEl = document.getElementById('cartItems');
+      const cartTotalEl = document.getElementById('cartTotal');
+
+      desktopCount.textContent = cart.length;
+      mobileCount.textContent = cart.length;
+
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p class=\"text-sm text-gray-500\">Your cart is empty.</p>';
+        cartTotalEl.textContent = '$0.00';
+        return;
+      }
+
+      let total = 0;
+      cartItemsEl.innerHTML = cart.map((item, idx) => {
+        total += item.price;
+        return `
+          <div class="rounded-xl border border-white/10 bg-nova-900/60 p-4">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="font-semibold text-sm">${item.plan}</p>
+                <p class="text-xs text-gray-500">${item.mode}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm font-bold">$${item.price.toFixed(2)}</p>
+                <button onclick="removeCartItem(${idx})" class="text-xs text-red-400 hover:text-red-300 mt-1">Remove</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      cartTotalEl.textContent = `$${total.toFixed(2)}`;
+      setTimeout(() => lucide.createIcons(), 0);
+    }
+
+    function addToCart(plan) {
+      const price = getPlanPrice(plan);
+      const mode = plan === 'Lifetime' ? 'One-time' : (isYearly ? 'Yearly plan' : 'Monthly plan');
+      cart.push({ plan, price, mode });
+      updateCartUI();
+      showToast(`${plan} Added 🛒`, `${mode} — $${price.toFixed(2)}`);
+    }
+
+    function removeCartItem(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function checkoutCart() {
+      if (!cart.length) {
+        showToast('Cart Empty', 'Add a plan before checkout.');
+        return;
+      }
+      showToast('Checkout Ready', 'Use Stripe Checkout + PayPal fallback + Coinbase Commerce.');
+      closeCart();
+    }
+
+    // Counter Animation
+    function animateCounter(element, target, suffix = '') {
+      let current = 0;
+      const increment = target / 60;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        if (suffix === 'K') {
+          element.textContent = Math.floor(current) + 'K+';
+        } else if (suffix === '%') {
+          element.textContent = current.toFixed(1) + '%';
+        } else {
+          element.textContent = Math.floor(current) + '+';
+        }
+      }, 16);
+    }
+
+    // Intersection Observer for stats
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(document.getElementById('statUsers'), 12, 'K');
+          animateCounter(document.getElementById('statUptime'), 99.9, '%');
+          animateCounter(document.getElementById('statUpdates'), 340, '');
+          statsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statsObserver.observe(document.getElementById('statUsers'));
+
+    // Floating Particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particle.style.animationDelay = (Math.random() * 10) + 's';
+        if (Math.random() > 0.5) {
+          particle.style.background = '#9333ea';
+        }
+        container.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Re-init icons after dynamic content
+    setTimeout(() => lucide.createIcons(), 100);
+    updateCartUI();
+  </script>
+<script src="https://deepsite.hf.co/deepsite-badge.js"></script>
+</body>
+</html>
